@@ -11,58 +11,113 @@
 </head>
 <body>
 
-<!-- LOGIN PREVIEW -->
+<!-- PRODUCT LANDING / SIGN-IN -->
 <section id="login" class="auth-screen">
-  <button class="theme-toggle btn secondary auth-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">☾ Dark mode</button>
-  <div class="auth-layout">
-    <aside class="auth-story">
-      <div class="brand auth-brand">
-        <span class="brand-icon">◈</span>
-        <div><strong>CHRONOS</strong><small>RESEARCH OS</small></div>
+  <header class="auth-nav">
+    <a class="brand auth-brand" href="#hero" aria-label="CHRONOS Research home">
+      <span class="brand-icon" aria-hidden="true">✳</span>
+      <span class="auth-brand-name"><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
+    </a>
+
+    <nav class="auth-links" aria-label="Main navigation">
+      <a href="#hero">Explore</a>
+      <a href="#capabilities">How it works</a>
+      <a href="#capabilities">For researchers</a>
+      <a href="#capabilities">Resources</a>
+    </nav>
+
+    <div class="auth-nav-actions">
+      <a class="auth-login-link" href="#sign-in">Log in</a>
+      <button class="theme-toggle auth-nav-theme" type="button" aria-pressed="false" aria-label="Switch to dark mode">◐</button>
+      <a class="auth-nav-cta" href="#sign-in">Get started</a>
+    </div>
+  </header>
+
+  <main id="hero" class="auth-hero">
+    <div class="auth-hero-copy">
+      <div class="auth-eyebrow"><span aria-hidden="true"></span> A WORKSPACE FOR CURIOUS MINDS</div>
+      <div class="auth-hero-heading">
+        <h1>
+          <span class="auth-heading-line">
+            <span class="auth-hero-art" aria-hidden="true">
+              <span class="auth-art-orbit"></span>
+              <span class="auth-art-node auth-art-node-one"></span>
+              <span class="auth-art-node auth-art-node-two"></span>
+              <span class="auth-art-node auth-art-node-three"></span>
+            </span>
+            THE NEXT BIG
+          </span>
+          <br> DISCOVERY STARTS
+          <br> WITH A QUESTION<span class="auth-title-period">.</span>
+          <a class="auth-inline-cta" href="#sign-in">Start exploring <span aria-hidden="true">→</span></a>
+        </h1>
       </div>
-      <div class="auth-story-copy">
-        <div class="eyebrow">A SPACE FOR INQUIRY</div>
-        <p>Good questions deserve<br>room to <em>unfold.</em></p>
-        <div class="auth-index">
-          <span>01 <i>Find the evidence</i></span>
-          <span>02 <i>Follow the idea</i></span>
-          <span>03 <i>See what connects</i></span>
+
+      <div class="auth-hero-bottom">
+        <div class="auth-intro-copy">
+          <p>Find the evidence. Follow the idea. See what connects.</p>
+        </div>
+        <div id="sign-in" class="auth-entry">
+          <form id="emailLoginForm" class="auth-form">
+            <label class="sr-only" for="loginEmail">Email address</label>
+            <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="Enter your email address" required>
+            <button type="submit" aria-label="Continue with email"><span aria-hidden="true">→</span></button>
+          </form>
+          <div class="auth-secondary-actions">
+            <button id="googleLogin" type="button"><span class="google-mark" aria-hidden="true">G</span> Continue with Google</button>
+            <span aria-hidden="true">or</span>
+            <button id="continueAsGuest" type="button">Explore as guest</button>
+          </div>
+          <p id="authStatus" class="auth-status hidden" role="status" aria-live="polite"></p>
+          <p class="auth-preview-note">Preview experience · Sign-in and cloud storage are not connected</p>
         </div>
       </div>
-      <div class="auth-story-footer">AN OPEN NOTEBOOK FOR RESEARCH</div>
-    </aside>
+    </div>
 
-    <main class="auth-card">
-      <div class="eyebrow">WELCOME BACK</div>
-      <h1>Return to your research.</h1>
-      <p class="auth-intro">Sign in to pick up where your curiosity left off.</p>
+    <dialog id="googleAccountDialog" class="google-account-dialog" aria-labelledby="googleAccountTitle">
+      <div class="google-dialog-mark" aria-hidden="true">G</div>
+      <h2 id="googleAccountTitle">Choose a Google account</h2>
+      <p>Connect Google sign-in with an OAuth Web Client ID to show the accounts already signed into this browser.</p>
+      <p class="google-dialog-note">When configured, Google will securely display its account chooser. CHRONOS cannot read signed-in Google accounts directly.</p>
+      <button id="closeGoogleDialog" class="btn primary auth-submit" type="button">Got it</button>
+    </dialog>
+  </main>
 
-      <form id="emailLoginForm" class="auth-form">
-        <label for="loginEmail">Email address</label>
-        <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-        <button class="btn primary auth-submit" type="submit">Continue with email</button>
-      </form>
-
-      <div class="auth-divider"><span>or</span></div>
-
-      <button id="googleLogin" class="auth-google" type="button">
-        <span class="google-mark" aria-hidden="true">G</span>
-        Continue with Google
-      </button>
-
-      <dialog id="googleAccountDialog" class="google-account-dialog" aria-labelledby="googleAccountTitle">
-        <div class="google-dialog-mark" aria-hidden="true">G</div>
-        <h2 id="googleAccountTitle">Choose a Google account</h2>
-        <p>Connect Google sign-in with an OAuth Web Client ID to show the accounts already signed into this browser.</p>
-        <p class="google-dialog-note">When configured, Google will securely display its account chooser. CHRONOS cannot read signed-in Google accounts directly.</p>
-        <button id="closeGoogleDialog" class="btn primary auth-submit" type="button">Got it</button>
-      </dialog>
-
-      <p id="authStatus" class="auth-status hidden" role="status" aria-live="polite"></p>
-      <p class="auth-preview-note">Front-end preview only. Sign-in and backend storage are not connected.</p>
-      <button id="continueAsGuest" class="auth-guest" type="button">Continue as guest</button>
-    </main>
-  </div>
+  <section id="capabilities" class="auth-feature-grid" aria-label="Research tools">
+    <article class="auth-feature-card auth-feature-evidence">
+      <div class="auth-feature-copy">
+        <span>RESEARCH LIBRARY</span>
+        <h2>Every answer<br>has a trail.</h2>
+        <p>Keep sources and discoveries close, so every new question has somewhere to begin.</p>
+        <a href="#sign-in">Explore the library <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="auth-card-visual auth-card-visual-evidence" aria-hidden="true">
+        <span class="visual-paper visual-paper-one"></span>
+        <span class="visual-paper visual-paper-two"></span>
+        <span class="visual-paper visual-paper-three"></span>
+        <span class="visual-spark">✳</span>
+      </div>
+    </article>
+    <article class="auth-feature-card auth-feature-graph">
+      <div class="auth-feature-copy">
+        <span>KNOWLEDGE UNIVERSE</span>
+        <h2>See what<br>connects.</h2>
+        <p>Explore the relationships between topics, papers, and ideas across research.</p>
+        <a href="#sign-in">Explore connections <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="auth-card-visual auth-card-visual-graph" aria-hidden="true">
+        <span class="visual-link visual-link-one"></span>
+        <span class="visual-link visual-link-two"></span>
+        <span class="visual-link visual-link-three"></span>
+        <span class="visual-link visual-link-four"></span>
+        <span class="visual-point visual-point-one"></span>
+        <span class="visual-point visual-point-two"></span>
+        <span class="visual-point visual-point-three"></span>
+        <span class="visual-point visual-point-four"></span>
+        <span class="visual-point visual-point-five"></span>
+      </div>
+    </article>
+  </section>
 </section>
 
 <!-- ONBOARDING -->
@@ -79,8 +134,8 @@
 
   <main class="onboard-content">
     <div class="eyebrow">YOUR PERSONAL RESEARCH WORKSPACE</div>
-    <h1>Research, built around you.</h1>
-    <p class="intro">Tell us a little about yourself so we can personalize your research experience.</p>
+    <h1>MAKE YOUR RESEARCH<br> SPACE YOURS.</h1>
+    <p class="intro">A few quick choices help shape the research tools and explanations you see.</p>
 
     <div class="onboard-card">
       <div class="step-line">
@@ -152,13 +207,44 @@
 
     <!-- HOME -->
     <section id="page-home" class="page">
+      <header class="home-site-nav">
+        <a class="home-site-brand" href="#homeForm" aria-label="CHRONOS home">
+          <span class="brand-icon" aria-hidden="true">✳</span>
+          <span><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
+        </a>
+        <nav class="home-site-links" aria-label="Research navigation">
+          <button class="home-nav-link" data-page="research">Research</button>
+          <button class="home-nav-link" data-page="graph">Explore ideas</button>
+          <button class="home-nav-link" data-page="history">History</button>
+          <button class="home-nav-link" data-page="library">Library</button>
+          <button class="home-nav-link" data-page="timeline">Timeline</button>
+        </nav>
+        <div class="home-site-actions">
+          <button class="theme-toggle auth-nav-theme home-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">◐</button>
+          <button id="homePreferencesBtn" class="home-preferences-link" type="button">Preferences</button>
+          <a class="home-site-cta" href="#homeForm">Get started</a>
+        </div>
+      </header>
+
       <div class="home-content">
         <div class="eyebrow">YOUR RESEARCH COMPANION</div>
-        <h1>What would you like to discover?</h1>
-        <p>Ask questions, explore scientific papers, trace discoveries and uncover research opportunities.</p>
+        <h1>
+          <span class="home-heading-line">
+            <span class="home-hero-art" aria-hidden="true"></span>
+            THE FUTURE OF
+          </span>
+          <br> RESEARCH STARTS
+          <br> HERE<span class="home-title-period">!</span>
+          <a class="home-inline-cta" href="#homeForm">Explore CHRONOS <span aria-hidden="true">→</span></a>
+        </h1>
+
+        <div class="home-intro-row">
+          <p>Every question can open a new path through the evidence.</p>
+          <p>Follow the ideas, sources, and discoveries that move research forward.</p>
+        </div>
 
         <form id="homeForm" class="prompt-box">
-          <textarea id="homeQuestion" rows="3" placeholder="Ask anything about research..." required></textarea>
+          <textarea id="homeQuestion" rows="2" placeholder="Ask anything about research..." required></textarea>
           <div class="prompt-footer">
             <span>◈ Evidence-backed research</span>
             <button type="submit" class="send-btn" aria-label="Ask research question">↑</button>
@@ -173,9 +259,18 @@
         </div>
 
         <div class="home-features">
-          <button data-page="research"><span>✳</span><strong>Research AI</strong><small>Ask with citations</small></button>
-          <button data-page="graph"><span>◎</span><strong>Knowledge Universe</strong><small>Explore connections</small></button>
-          <button data-page="timeline"><span>◷</span><strong>Time Machine</strong><small>Trace discoveries</small></button>
+          <button data-page="research">
+            <span class="home-feature-label">RESEARCH AI</span>
+            <strong>Find the signal.</strong>
+            <small>Explore questions with evidence-backed research.</small>
+            <span class="home-feature-art home-feature-art-research" aria-hidden="true">✳</span>
+          </button>
+          <button data-page="graph">
+            <span class="home-feature-label">KNOWLEDGE UNIVERSE</span>
+            <strong>See what connects.</strong>
+            <small>Discover relationships between topics and ideas.</small>
+            <span class="home-feature-art home-feature-art-graph" aria-hidden="true">◎</span>
+          </button>
         </div>
       </div>
     </section>

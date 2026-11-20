@@ -185,6 +185,15 @@ function showOnboarding() {
   $("questionView").classList.remove("hidden");
   $("completeView").classList.add("hidden");
 
+  if (window.location.hash) {
+    window.history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search
+    );
+  }
+
+  window.scrollTo(0, 0);
   step = 0;
   renderQuestion();
 }
@@ -240,6 +249,7 @@ $("finishSetup").addEventListener("click", () => {
 });
 
 $("preferencesBtn").addEventListener("click", showOnboarding);
+$("homePreferencesBtn").addEventListener("click", showOnboarding);
 
 function setTheme(theme) {
   const isDark = theme === "dark";
@@ -251,8 +261,89 @@ function setTheme(theme) {
       "aria-label",
       isDark ? "Switch to light mode" : "Switch to dark mode"
     );
-    toggle.textContent = isDark ? "☀ Light mode" : "☾ Dark mode";
+    toggle.textContent = toggle.classList.contains("auth-nav-theme")
+      ? (isDark ? "☀" : "◐")
+      : (isDark ? "☀ Light mode" : "☾ Dark mode");
   });
+
+  applyGraphTheme(theme);
+}
+
+function applyGraphTheme(theme) {
+  if (!cy) return;
+
+  const colors = theme === "dark"
+    ? {
+        label: "#eaf3ff",
+        outline: "#151e2b",
+        node: "#5f8fc9",
+        nodeBorder: "#a7c7f1",
+        core: "#75aaff",
+        coreBorder: "#c5ddff",
+        hub: "#89a9d1",
+        paper: "#a494d1",
+        paperBorder: "#d0c4ef",
+        researcher: "#72b89d",
+        researcherBorder: "#b0e0cb",
+        edge: "#8299b6",
+        strongEdge: "#8dbaff",
+        selected: "#d7e8ff",
+        highlighted: "#75aaff"
+      }
+    : {
+        label: "#162b45",
+        outline: "#f3f7fb",
+        node: "#5083bb",
+        nodeBorder: "#375f91",
+        core: "#2878df",
+        coreBorder: "#1956a8",
+        hub: "#85a9d0",
+        paper: "#907dca",
+        paperBorder: "#7564aa",
+        researcher: "#4e9d80",
+        researcherBorder: "#32785e",
+        edge: "#7b94b0",
+        strongEdge: "#3985df",
+        selected: "#164c98",
+        highlighted: "#2671df"
+      };
+
+  cy.style()
+    .selector("node")
+    .style({
+      color: colors.label,
+      "text-outline-color": colors.outline,
+      "background-color": colors.node,
+      "border-color": colors.nodeBorder
+    })
+    .selector('node[type="core"]')
+    .style({
+      "background-color": colors.core,
+      "border-color": colors.coreBorder
+    })
+    .selector('node[type="hub"]')
+    .style("background-color", colors.hub)
+    .selector('node[type="topic"]')
+    .style("background-color", colors.node)
+    .selector('node[type="paper"]')
+    .style({
+      "background-color": colors.paper,
+      "border-color": colors.paperBorder
+    })
+    .selector('node[type="researcher"]')
+    .style({
+      "background-color": colors.researcher,
+      "border-color": colors.researcherBorder
+    })
+    .selector("edge")
+    .style("line-color", colors.edge)
+    .selector('edge[strength="strong"]')
+    .style("line-color", colors.strongEdge)
+    .selector("node:selected")
+    .style("border-color", colors.selected)
+    .selector("edge.highlighted")
+    .style("line-color", colors.highlighted)
+    .update();
 }
 
 function saveThemePreference(theme) {
@@ -280,6 +371,7 @@ function openApp() {
   $("login").classList.add("hidden");
   $("onboarding").classList.add("hidden");
   $("app").classList.remove("hidden");
+  window.scrollTo(0, 0);
 
   const initial = profile.role.charAt(0).toUpperCase();
 
@@ -297,6 +389,7 @@ function openApp() {
 
 function openPage(page) {
   currentPage = page;
+  $("app").classList.toggle("home-mode", page === "home");
 
   document.querySelectorAll(".page").forEach(section => {
     section.classList.add("hidden");
@@ -305,6 +398,9 @@ function openPage(page) {
   $(`page-${page}`).classList.remove("hidden");
 
   document.querySelectorAll(".nav-item[data-page]").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === page);
+  });
+  document.querySelectorAll(".home-nav-link[data-page]").forEach(button => {
     button.classList.toggle("active", button.dataset.page === page);
   });
 
@@ -1073,7 +1169,7 @@ function initializeGraph() {
           "font-family": "Arial, sans-serif",
           "font-size": 11,
           "text-outline-width": 2,
-          "text-outline-color": "#19191e",
+          "text-outline-color": "#f7f5ef",
           "text-valign": "top",
           "text-margin-y": -10,
           "z-index": 5
@@ -1131,7 +1227,7 @@ function initializeGraph() {
         style: {
           "width": 0.6,
           "line-color": "#a68569",
-          "opacity": 0.18,
+          "opacity": 0.28,
           "curve-style": "straight",
           "line-cap": "round"
         }
@@ -1140,7 +1236,7 @@ function initializeGraph() {
         selector: 'edge[strength="strong"]',
         style: {
           "width": 1.25,
-          "opacity": 0.46,
+          "opacity": 0.6,
           "line-color": "#cf9a76"
         }
       },
@@ -1176,6 +1272,8 @@ function initializeGraph() {
       }
     ]
   });
+
+  applyGraphTheme(document.documentElement.dataset.theme);
 
   cy.on("tap", "node", event => {
     selectGraphNode(event.target.id());
@@ -1321,7 +1419,7 @@ function renderNodeConnections(node) {
   if (!sources.children.length) {
     const note = document.createElement("p");
     note.style.cssText =
-      "font-size:11px;color:#8799ab;line-height:1.7";
+      "font-size:11px;color:var(--muted);line-height:1.7";
     note.textContent =
       activeGraph?.demo
         ? "Demo graph — no verified sources attached."
