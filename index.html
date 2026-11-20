@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHRONOS — ResearchOS</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/cytoscape@3.30.4/dist/cytoscape.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- LOGIN PREVIEW -->
+<section id="login" class="auth-screen">
+  <button class="theme-toggle btn secondary auth-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">☾ Dark mode</button>
+  <div class="auth-layout">
+    <aside class="auth-story">
+      <div class="brand auth-brand">
+        <span class="brand-icon">◈</span>
+        <div><strong>CHRONOS</strong><small>RESEARCH OS</small></div>
+      </div>
+      <div class="auth-story-copy">
+        <div class="eyebrow">A SPACE FOR INQUIRY</div>
+        <p>Good questions deserve<br>room to <em>unfold.</em></p>
+        <div class="auth-index">
+          <span>01 <i>Find the evidence</i></span>
+          <span>02 <i>Follow the idea</i></span>
+          <span>03 <i>See what connects</i></span>
+        </div>
+      </div>
+      <div class="auth-story-footer">AN OPEN NOTEBOOK FOR RESEARCH</div>
+    </aside>
+
+    <main class="auth-card">
+      <div class="eyebrow">WELCOME BACK</div>
+      <h1>Return to your research.</h1>
+      <p class="auth-intro">Sign in to pick up where your curiosity left off.</p>
+
+      <form id="emailLoginForm" class="auth-form">
+        <label for="loginEmail">Email address</label>
+        <input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <button class="btn primary auth-submit" type="submit">Continue with email</button>
+      </form>
+
+      <div class="auth-divider"><span>or</span></div>
+
+      <button id="googleLogin" class="auth-google" type="button">
+        <span class="google-mark" aria-hidden="true">G</span>
+        Continue with Google
+      </button>
+
+      <dialog id="googleAccountDialog" class="google-account-dialog" aria-labelledby="googleAccountTitle">
+        <div class="google-dialog-mark" aria-hidden="true">G</div>
+        <h2 id="googleAccountTitle">Choose a Google account</h2>
+        <p>Connect Google sign-in with an OAuth Web Client ID to show the accounts already signed into this browser.</p>
+        <p class="google-dialog-note">When configured, Google will securely display its account chooser. CHRONOS cannot read signed-in Google accounts directly.</p>
+        <button id="closeGoogleDialog" class="btn primary auth-submit" type="button">Got it</button>
+      </dialog>
+
+      <p id="authStatus" class="auth-status hidden" role="status" aria-live="polite"></p>
+      <p class="auth-preview-note">Front-end preview only. Sign-in and backend storage are not connected.</p>
+      <button id="continueAsGuest" class="auth-guest" type="button">Continue as guest</button>
+    </main>
+  </div>
+</section>
+
+<!-- ONBOARDING -->
+<section id="onboarding" class="onboarding hidden">
+  <header class="onboard-top">
+    <div class="brand"><span class="brand-icon">◈</span>
+      <div><strong>CHRONOS</strong><small>RESEARCH OS</small></div>
+    </div>
+    <div class="onboard-header-actions">
+      <button class="theme-toggle btn secondary" type="button" aria-pressed="false" aria-label="Switch to dark mode">☾ Dark mode</button>
+      <button id="skipSetup" class="text-btn">Skip setup →</button>
+    </div>
+  </header>
+
+  <main class="onboard-content">
+    <div class="eyebrow">YOUR PERSONAL RESEARCH WORKSPACE</div>
+    <h1>Research, built around you.</h1>
+    <p class="intro">Tell us a little about yourself so we can personalize your research experience.</p>
+
+    <div class="onboard-card">
+      <div class="step-line">
+        <span id="stepLabel">STEP 01 OF 04</span>
+        <span id="stepPercent">25%</span>
+      </div>
+      <div class="progress"><div id="progressFill"></div></div>
+
+      <div id="questionView">
+        <h2 id="questionTitle"></h2>
+        <p id="questionDesc"></p>
+        <div id="optionList" class="options"></div>
+        <div class="onboard-actions">
+          <button id="backStep" class="btn secondary">Back</button>
+          <button id="nextStep" class="btn primary">Continue →</button>
+        </div>
+      </div>
+
+      <div id="completeView" class="complete hidden">
+        <div class="complete-icon">✓</div>
+        <h2>Your workspace is ready.</h2>
+        <p id="profileSummary"></p>
+        <button id="finishSetup" class="btn primary">Open CHRONOS →</button>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- APPLICATION -->
+<div id="app" class="app hidden">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand sidebar-brand">
+      <span class="brand-icon">◈</span>
+      <div><strong>CHRONOS</strong><small>RESEARCH OS</small></div>
+    </div>
+
+    <div class="nav-heading">WORKSPACE</div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="home"><span>⌂</span> Home</button>
+      <button class="nav-item" data-page="research"><span>✳</span> Research AI</button>
+      <button class="nav-item" data-page="history"><span>↺</span> Chat History</button>
+      <button class="nav-item" data-page="graph"><span>◎</span> Knowledge Universe</button>
+      <button class="nav-item" data-page="timeline"><span>◷</span> Time Machine</button>
+      <button class="nav-item" data-page="library"><span>▤</span> Library</button>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+    <button class="nav-item" id="preferencesBtn"><span>⚙</span> Preferences</button>
+    <div class="profile">
+      <div id="profileAvatar" class="avatar">S</div>
+      <div><strong id="profileRole">Student</strong><small>Personal workspace</small></div>
+    </div>
+  </aside>
+
+  <div class="app-main">
+    <header class="topbar">
+      <div class="top-left">
+        <button id="menuBtn" class="icon-btn mobile-only">☰</button>
+        <span id="breadcrumb">Workspace / Home</span>
+      </div>
+      <div class="top-right">
+        <span class="connection" id="connectionStatus"><i></i> API not checked</span>
+        <button id="newChatTop" class="btn secondary">+ New research</button>
+        <button class="theme-toggle btn secondary" type="button" aria-pressed="false" aria-label="Switch to dark mode">☾ Dark mode</button>
+        <div id="topAvatar" class="avatar">S</div>
+      </div>
+    </header>
+
+    <!-- HOME -->
+    <section id="page-home" class="page">
+      <div class="home-content">
+        <div class="eyebrow">YOUR RESEARCH COMPANION</div>
+        <h1>What would you like to discover?</h1>
+        <p>Ask questions, explore scientific papers, trace discoveries and uncover research opportunities.</p>
+
+        <form id="homeForm" class="prompt-box">
+          <textarea id="homeQuestion" rows="3" placeholder="Ask anything about research..." required></textarea>
+          <div class="prompt-footer">
+            <span>◈ Evidence-backed research</span>
+            <button type="submit" class="send-btn" aria-label="Ask research question">↑</button>
+          </div>
+        </form>
+
+        <div class="suggestions">
+          <button data-prompt="How has artificial intelligence evolved in healthcare?">Evolution of AI in healthcare ↗</button>
+          <button data-prompt="What are the major breakthroughs in quantum computing?">Quantum computing breakthroughs ↗</button>
+          <button data-prompt="What are the research gaps in renewable energy storage?">Research gaps in energy storage ↗</button>
+          <button data-prompt="How has archaeological research changed our understanding of ancient Egypt?">Ancient Egypt discoveries ↗</button>
+        </div>
+
+        <div class="home-features">
+          <button data-page="research"><span>✳</span><strong>Research AI</strong><small>Ask with citations</small></button>
+          <button data-page="graph"><span>◎</span><strong>Knowledge Universe</strong><small>Explore connections</small></button>
+          <button data-page="timeline"><span>◷</span><strong>Time Machine</strong><small>Trace discoveries</small></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH CHAT -->
+    <section id="page-research" class="page hidden">
+      <div class="chat-layout">
+        <div class="chat-toolbar">
+          <div><h2>Research AI</h2><p>Your evidence-backed research assistant</p></div>
+          <button id="clearChat" class="btn secondary">New chat</button>
+        </div>
+
+        <div id="chatMessages" class="chat-messages">
+          <div class="chat-empty" id="chatEmpty">
+            <div class="chat-empty-symbol">✳</div>
+            <h2>Ask CHRONOS anything.</h2>
+            <p>Research papers, historical discoveries, and scientific questions — with supporting sources.</p>
+          </div>
+        </div>
+
+        <form id="chatForm" class="chat-composer">
+          <textarea id="chatQuestion" rows="2" placeholder="Ask a research question..." required></textarea>
+          <div class="composer-bottom">
+            <span id="agentStatus">Research • Evidence • History • Connections • Future</span>
+            <button id="sendChat" class="send-btn" type="submit" aria-label="Send">↑</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- CHAT HISTORY -->
+    <section id="page-history" class="page hidden">
+      <div class="standard-page">
+        <div class="eyebrow">RESEARCH ARCHIVE</div>
+        <h1>Previous chats</h1>
+        <p>Reopen a conversation and continue where you left off.</p>
+        <div id="chatHistoryList" class="chat-history-list"></div>
+      </div>
+    </section>
+
+    <!-- KNOWLEDGE GRAPH -->
+    <section id="page-graph" class="page graph-page hidden">
+      <div class="graph-toolbar">
+        <div>
+          <h2>Knowledge Universe</h2>
+          <p id="graphSubtitle">Explore a network of connected research concepts</p>
+        </div>
+        <div class="graph-toolbar-actions">
+          <input id="graphSearch" type="search" placeholder="Find a node..." aria-label="Find graph node">
+          <button id="graphZoomOut" class="graph-btn" title="Zoom out">−</button>
+          <button id="graphZoomIn" class="graph-btn" title="Zoom in">+</button>
+          <button id="graphFit" class="graph-btn" title="Fit graph">⛶</button>
+          <button id="graphDemoReset" class="graph-btn" title="Reset demo graph">↺</button>
+        </div>
+      </div>
+
+      <div class="graph-layout">
+        <div class="graph-main">
+          <div id="cy" aria-label="Interactive research knowledge graph"></div>
+          <div class="graph-caption">
+            <span><i class="legend-circle cyan"></i> Concept</span>
+            <span><i class="legend-circle purple"></i> Paper</span>
+            <span><i class="legend-circle green"></i> Researcher</span>
+            <span class="graph-caption-right" id="graphCounts">Demo network</span>
+          </div>
+        </div>
+
+        <aside class="graph-inspector">
+          <div class="inspector-title">NODE INSPECTOR</div>
+          <div class="selected-node">
+            <span id="nodeType">CONCEPT</span>
+            <h3 id="nodeTitle">AI in Healthcare</h3>
+            <p id="nodeDescription">Select any node to inspect its relationships.</p>
+          </div>
+          <div class="inspector-section">
+            <div class="inspector-section-title">CONNECTED RESEARCH</div>
+            <div id="nodeConnections"></div>
+          </div>
+          <div class="inspector-section">
+            <div class="inspector-section-title">SOURCES</div>
+            <div id="nodeSources"></div>
+          </div>
+          <button id="askAboutNode" class="btn graph-ask">Ask Research AI about this →</button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section id="page-timeline" class="page hidden">
+      <div class="standard-page">
+        <div class="eyebrow">RESEARCH TIME MACHINE</div>
+        <h1>Discover how ideas evolved.</h1>
+        <p>Explore major milestones, historical breakthroughs, and supporting publications.</p>
+        <div id="timelineList" class="timeline-list"></div>
+      </div>
+    </section>
+
+    <!-- LIBRARY -->
+    <section id="page-library" class="page hidden">
+      <div class="standard-page">
+        <div class="eyebrow">RESEARCH LIBRARY</div>
+        <h1>Recent research</h1>
+        <p>Research questions and source references from this browser session.</p>
+        <div id="libraryList" class="library-list"></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+</body>
+</html>
