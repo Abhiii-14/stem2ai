@@ -4060,9 +4060,14 @@ input::placeholder {
   }
 
   .home-mode .home-intro-row {
+    width: 100%;
     grid-template-columns: 1fr;
     gap: 8px;
     margin-top: 20px;
+  }
+
+  .home-mode .home-intro-row p {
+    font-size: 14px;
   }
 
   .home-mode .prompt-box {
