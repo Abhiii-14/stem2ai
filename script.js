@@ -62,6 +62,88 @@ function enablePointerGradient() {
 
 enablePointerGradient();
 
+const navIndicatorSync = new WeakMap();
+
+function enableNavHoverGlass() {
+  document.querySelectorAll(".home-site-links").forEach(nav => {
+    const indicator = document.createElement("span");
+    indicator.className = "nav-liquid-indicator";
+    indicator.setAttribute("aria-hidden", "true");
+    nav.prepend(indicator);
+
+    function moveIndicator(target, state = "hover") {
+      if (!target) return;
+
+      const navBounds = nav.getBoundingClientRect();
+      const targetBounds = target.getBoundingClientRect();
+      const previousTarget = nav.querySelector(".nav-liquid-target");
+      if (previousTarget !== target) {
+        if (previousTarget) previousTarget.classList.remove("nav-liquid-target");
+        target.classList.add("nav-liquid-target");
+      }
+
+      nav.style.setProperty("--nav-pill-x", `${targetBounds.left - navBounds.left + nav.scrollLeft - nav.clientLeft}px`);
+      nav.style.setProperty("--nav-pill-y", `${targetBounds.top - navBounds.top + nav.scrollTop - nav.clientTop}px`);
+      nav.style.setProperty("--nav-pill-width", `${targetBounds.width}px`);
+      nav.style.setProperty("--nav-pill-height", `${targetBounds.height}px`);
+      indicator.dataset.state = state;
+      nav.classList.add("nav-indicator-ready");
+      if (state === "active") {
+        nav.classList.remove("nav-hovering");
+        nav.classList.remove("nav-indicator-ready");
+      } else {
+        nav.classList.add("nav-hovering");
+        nav.classList.add("nav-indicator-ready");
+      }
+    }
+
+    function moveToActiveItem() {
+      moveIndicator(nav.querySelector(".home-nav-link.active") || nav.querySelector(".home-nav-link"), "active");
+    }
+
+    navIndicatorSync.set(nav, moveToActiveItem);
+
+    nav.addEventListener("pointermove", event => {
+      if (event.pointerType !== "mouse") return;
+      const bounds = nav.getBoundingClientRect();
+      nav.style.setProperty("--nav-pointer-x", `${event.clientX - bounds.left}px`);
+      nav.style.setProperty("--nav-pointer-y", `${event.clientY - bounds.top}px`);
+      nav.classList.add("pointer-glow");
+    }, { passive: true });
+
+    nav.addEventListener("pointerover", event => {
+      if (event.pointerType !== "mouse" || !(event.target instanceof Element)) return;
+      const target = event.target.closest(".home-nav-link");
+      if (target && nav.contains(target)) moveIndicator(target);
+    });
+
+    nav.addEventListener("pointerleave", () => {
+      nav.classList.remove("pointer-glow");
+      moveToActiveItem();
+    });
+    nav.addEventListener("focusin", event => {
+      if (!(event.target instanceof Element)) return;
+      const target = event.target.closest(".home-nav-link");
+      if (target && nav.contains(target)) moveIndicator(target);
+    });
+    nav.addEventListener("focusout", event => {
+      if (!nav.contains(event.relatedTarget)) moveToActiveItem();
+    });
+    nav.addEventListener("scroll", moveToActiveItem, { passive: true });
+    window.addEventListener("resize", moveToActiveItem, { passive: true });
+    moveToActiveItem();
+  });
+}
+
+enableNavHoverGlass();
+
+function syncNavLiquidIndicators() {
+  document.querySelectorAll(".home-site-links").forEach(nav => {
+    const sync = navIndicatorSync.get(nav);
+    if (sync) sync();
+  });
+}
+
 const questions = [
   {
     key: "role",
@@ -132,6 +214,18 @@ let profile = {
 
 let step = 0;
 let currentPage = "home";
+
+function updateWorkspaceNavStickiness() {
+  const section = $(`page-${currentPage}`);
+  const chatMessages = section.querySelector(".chat-messages");
+  const scrollTop = Math.max(section.scrollTop, chatMessages ? chatMessages.scrollTop : 0);
+  document.querySelector("#page-home .home-site-nav").classList.toggle(
+    "nav-stuck",
+    currentPage === "home" && section.scrollTop >= 78
+  );
+  $("sidebar").classList.toggle("nav-stuck", currentPage === "research" && scrollTop > 40);
+}
+
 let chatHistory = [];
 let previousChats = [];
 let currentConversationId = null;
@@ -298,9 +392,6 @@ $("finishSetup").addEventListener("click", () => {
   openApp();
 });
 
-$("preferencesBtn").addEventListener("click", showOnboarding);
-$("homePreferencesBtn").addEventListener("click", showOnboarding);
-
 function setTheme(theme) {
   const isDark = theme === "dark";
   document.documentElement.dataset.theme = isDark ? "dark" : "light";
@@ -452,6 +543,26 @@ function openPage(page) {
   document.querySelectorAll(".home-nav-link[data-page]").forEach(button => {
     button.classList.toggle("active", button.dataset.page === page);
   });
+  syncNavLiquidIndicators();
+
+  if (window.matchMedia("(max-width: 960px)").matches) {
+    const activeNav = [...document.querySelectorAll(".home-site-links")]
+      .map(nav => ({
+        nav,
+        active: nav.querySelector(".home-nav-link.active")
+      }))
+      .find(({ nav, active }) => nav.clientWidth > 0 && active);
+
+    if (activeNav) {
+      const { nav, active } = activeNav;
+      const targetLeft =
+        active.offsetLeft - (nav.clientWidth - active.offsetWidth) / 2;
+      nav.scrollTo({
+        left: Math.max(0, targetLeft),
+        behavior: "smooth"
+      });
+    }
+  }
 
   const labels = {
     home: "Home",
@@ -479,7 +590,19 @@ function openPage(page) {
   if (page === "timeline") renderTimeline();
   if (page === "library") renderLibrary();
   if (page === "history") renderChatHistory();
+
+  updateWorkspaceNavStickiness();
 }
+
+document.querySelectorAll(".page").forEach(section => {
+  section.addEventListener("scroll", () => {
+    if (section.id === `page-${currentPage}`) updateWorkspaceNavStickiness();
+  }, { passive: true });
+});
+document.querySelectorAll("#page-research .chat-messages").forEach(messages => {
+  messages.addEventListener("scroll", updateWorkspaceNavStickiness, { passive: true });
+});
+window.addEventListener("resize", updateWorkspaceNavStickiness);
 
 document.querySelectorAll("[data-page]").forEach(button => {
   button.addEventListener("click", () => {
@@ -1329,9 +1452,8 @@ function initializeGraph() {
   });
 
   cy.on("tap", event => {
-    if (event.target === cy && window.innerWidth <= 760) {
-      document.querySelector(".graph-inspector")
-        .classList.remove("open");
+    if (event.target === cy && window.innerWidth <= 860) {
+      setGraphInspectorOpen(false);
     }
   });
 }
@@ -1377,10 +1499,17 @@ function renderGraph(graph) {
     ? graph.nodes[0]?.data.id
     : graph.nodes[0]?.data.id;
 
-  if (firstId) selectGraphNode(firstId);
+  if (firstId) selectGraphNode(firstId, false);
 }
 
-function selectGraphNode(id) {
+function setGraphInspectorOpen(open) {
+  const inspector = $("graphInspector");
+  inspector.classList.toggle("open", open);
+  $("graphInspectorToggle").setAttribute("aria-expanded", String(open));
+  $("graphInspectorToggle").textContent = open ? "Hide details" : "Node details";
+}
+
+function selectGraphNode(id, showInspector = true) {
   if (!cy) return;
 
   const node = cy.getElementById(id);
@@ -1409,9 +1538,8 @@ function selectGraphNode(id) {
 
   renderNodeConnections(node);
 
-  if (window.innerWidth <= 760) {
-    document.querySelector(".graph-inspector")
-      .classList.add("open");
+  if (window.innerWidth <= 860) {
+    setGraphInspectorOpen(showInspector);
   }
 }
 
@@ -1506,6 +1634,11 @@ $("graphFit").addEventListener("click", () => {
   if (cy) cy.fit(undefined, 45);
 });
 
+$("graphInspectorToggle").addEventListener("click", () => {
+  const isOpen = $("graphInspectorToggle").getAttribute("aria-expanded") === "true";
+  setGraphInspectorOpen(!isOpen);
+});
+
 $("graphDemoReset").addEventListener("click", () => {
   activeGraph = createDemoGraph();
   $("graphSearch").value = "";
@@ -1541,8 +1674,7 @@ $("askAboutNode").addEventListener("click", () => {
     `Explain the scientific research related to ${node.data("label")}. ` +
     "Include supporting academic sources and important developments.";
 
-  document.querySelector(".graph-inspector")
-    .classList.remove("open");
+  setGraphInspectorOpen(false);
 
   askResearch(question);
 });

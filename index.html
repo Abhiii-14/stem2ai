@@ -168,6 +168,7 @@
 <div id="app" class="app hidden">
 
   <header class="app-navbar home-site-nav" id="sidebar">
+  <div class="app-navbar-topbar">
     <a class="home-site-brand app-home-brand" href="#homeForm" aria-label="CHRONOS home">
       <span class="brand-icon" aria-hidden="true">✳</span>
       <span><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
@@ -183,13 +184,12 @@
     </nav>
 
     <div class="home-site-actions app-navbar-actions">
-      <span class="connection" id="connectionStatus"><i></i> API not checked</span>
       <button id="newChatTop" class="home-site-cta" type="button">+ New research</button>
       <button class="theme-toggle auth-nav-theme home-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">◐</button>
-      <button class="home-preferences-link" id="preferencesBtn" type="button">Preferences</button>
       <div class="profile">
         <div id="profileAvatar" class="avatar">S</div>
         <div><strong id="profileRole">Student</strong><small>Personal workspace</small></div>
+      </div>
       </div>
     </div>
   </header>
@@ -205,10 +205,16 @@
     <!-- HOME -->
     <section id="page-home" class="page">
       <header class="home-site-nav">
-        <a class="home-site-brand" href="#homeForm" aria-label="CHRONOS home">
-          <span class="brand-icon" aria-hidden="true">✳</span>
-          <span><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
-        </a>
+        <div class="home-site-topbar">
+          <a class="home-site-brand" href="#homeForm" aria-label="CHRONOS home">
+            <span class="brand-icon" aria-hidden="true">✳</span>
+            <span><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
+          </a>
+          <div class="home-site-actions">
+            <button class="theme-toggle auth-nav-theme home-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">◐</button>
+            <a class="home-site-cta" href="#homeForm">Get started</a>
+          </div>
+        </div>
         <nav class="home-site-links" aria-label="Research navigation">
           <button class="home-nav-link" data-page="research">Research</button>
           <button class="home-nav-link" data-page="graph">Explore ideas</button>
@@ -216,11 +222,6 @@
           <button class="home-nav-link" data-page="library">Library</button>
           <button class="home-nav-link" data-page="timeline">Timeline</button>
         </nav>
-        <div class="home-site-actions">
-          <button class="theme-toggle auth-nav-theme home-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">◐</button>
-          <button id="homePreferencesBtn" class="home-preferences-link" type="button">Preferences</button>
-          <a class="home-site-cta" href="#homeForm">Get started</a>
-        </div>
       </header>
 
       <div class="home-content">
@@ -269,6 +270,51 @@
             <span class="home-feature-art home-feature-art-graph" aria-hidden="true">◎</span>
           </button>
         </div>
+
+        <section class="home-research-tools" aria-labelledby="homeToolsTitle">
+          <div class="home-tools-heading">
+            <div>
+              <span class="eyebrow">FROM QUESTION TO UNDERSTANDING</span>
+              <h2 id="homeToolsTitle">Every part of the research journey.</h2>
+            </div>
+            <p>Move from an open question to evidence, connections, and a clear timeline.</p>
+          </div>
+
+          <div class="home-tools-grid">
+            <button class="home-tool-card" data-page="research" type="button">
+              <span class="home-tool-number">01</span>
+              <span class="home-tool-icon" aria-hidden="true">✳</span>
+              <h3>Ask with context</h3>
+              <p>Explore a topic with an evidence-backed research assistant that keeps supporting sources close.</p>
+              <span class="home-tool-link">Open Research AI <span aria-hidden="true">→</span></span>
+            </button>
+
+            <button class="home-tool-card" data-page="graph" type="button">
+              <span class="home-tool-number">02</span>
+              <span class="home-tool-icon" aria-hidden="true">◎</span>
+              <h3>Discover connections</h3>
+              <p>Map relationships between papers, researchers, concepts, discoveries, and emerging ideas.</p>
+              <span class="home-tool-link">Explore the universe <span aria-hidden="true">→</span></span>
+            </button>
+
+            <button class="home-tool-card" data-page="timeline" type="button">
+              <span class="home-tool-number">03</span>
+              <span class="home-tool-icon" aria-hidden="true">◷</span>
+              <h3>Trace the evolution</h3>
+              <p>Follow milestones and breakthroughs to understand how a field developed over time.</p>
+              <span class="home-tool-link">Open time machine <span aria-hidden="true">→</span></span>
+            </button>
+          </div>
+        </section>
+
+        <footer class="home-footer">
+          <a class="home-site-brand" href="#homeForm" aria-label="CHRONOS home">
+            <span class="brand-icon" aria-hidden="true">✳</span>
+            <span><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
+          </a>
+          <p>Evidence-led research for curious minds.</p>
+          <button type="button" data-page="history">View research history <span aria-hidden="true">→</span></button>
+        </footer>
       </div>
     </section>
 
@@ -282,7 +328,21 @@
 
         <div id="chatMessages" class="chat-messages">
           <div class="chat-empty" id="chatEmpty">
-            <div class="chat-empty-symbol">✳</div>
+            <div class="chat-empty-symbol">
+              ✳
+              <svg class="chat-orbit" viewBox="0 0 140 100" aria-hidden="true">
+                <g transform="rotate(-20 70 50)">
+                  <ellipse cx="70" cy="50" rx="70" ry="50"></ellipse>
+                  <circle r="4.5" fill="var(--sun)">
+                    <animateMotion
+                      dur="7s"
+                      repeatCount="indefinite"
+                      path="M 70 50 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0">
+                    </animateMotion>
+                  </circle>
+                </g>
+              </svg>
+            </div>
             <h2>Ask CHRONOS anything.</h2>
             <p>Research papers, historical discoveries, and scientific questions — with supporting sources.</p>
           </div>
@@ -321,6 +381,7 @@
           <button id="graphZoomIn" class="graph-btn" title="Zoom in">+</button>
           <button id="graphFit" class="graph-btn" title="Fit graph">⛶</button>
           <button id="graphDemoReset" class="graph-btn" title="Reset demo graph">↺</button>
+          <button id="graphInspectorToggle" class="graph-btn graph-mobile-only" type="button" aria-controls="graphInspector" aria-expanded="false">Node details</button>
         </div>
       </div>
 
@@ -335,7 +396,7 @@
           </div>
         </div>
 
-        <aside class="graph-inspector">
+        <aside class="graph-inspector" id="graphInspector">
           <div class="inspector-title">NODE INSPECTOR</div>
           <div class="selected-node">
             <span id="nodeType">CONCEPT</span>
@@ -376,6 +437,7 @@
     </section>
 
   </div>
+  <span class="connection app-connection-status" id="connectionStatus" role="status" aria-live="polite"><i></i> API not checked</span>
 </div>
 
 </body>
