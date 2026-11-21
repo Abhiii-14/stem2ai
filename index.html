@@ -48,7 +48,7 @@
             THE NEXT BIG
           </span>
           <br> DISCOVERY STARTS
-          <br> WITH A QUESTION<span class="auth-title-period">.</span>
+          <br> WITH A <em class="editorial-accent">QUESTION</em><span class="auth-title-period">.</span>
           <a class="auth-inline-cta" href="#sign-in">Start exploring <span aria-hidden="true">→</span></a>
         </h1>
       </div>
@@ -167,41 +167,38 @@
 <!-- APPLICATION -->
 <div id="app" class="app hidden">
 
-  <aside class="sidebar" id="sidebar">
-    <div class="brand sidebar-brand">
-      <span class="brand-icon">◈</span>
-      <div><strong>CHRONOS</strong><small>RESEARCH OS</small></div>
-    </div>
+  <header class="app-navbar home-site-nav" id="sidebar">
+    <a class="home-site-brand app-home-brand" href="#homeForm" aria-label="CHRONOS home">
+      <span class="brand-icon" aria-hidden="true">✳</span>
+      <span><strong>CHRONOS</strong><small>RESEARCH OS</small></span>
+    </a>
 
-    <div class="nav-heading">WORKSPACE</div>
-    <nav class="nav">
-      <button class="nav-item active" data-page="home"><span>⌂</span> Home</button>
-      <button class="nav-item" data-page="research"><span>✳</span> Research AI</button>
-      <button class="nav-item" data-page="history"><span>↺</span> Chat History</button>
-      <button class="nav-item" data-page="graph"><span>◎</span> Knowledge Universe</button>
-      <button class="nav-item" data-page="timeline"><span>◷</span> Time Machine</button>
-      <button class="nav-item" data-page="library"><span>▤</span> Library</button>
+    <nav class="home-site-links app-page-links" aria-label="Workspace navigation">
+      <button class="home-nav-link nav-item active" data-page="home"><span>⌂</span> Home</button>
+      <button class="home-nav-link nav-item" data-page="research"><span>✳</span> Research AI</button>
+      <button class="home-nav-link nav-item" data-page="history"><span>↺</span> Chat History</button>
+      <button class="home-nav-link nav-item" data-page="graph"><span>◎</span> Knowledge Universe</button>
+      <button class="home-nav-link nav-item" data-page="timeline"><span>◷</span> Time Machine</button>
+      <button class="home-nav-link nav-item" data-page="library"><span>▤</span> Library</button>
     </nav>
 
-    <div class="sidebar-spacer"></div>
-    <button class="nav-item" id="preferencesBtn"><span>⚙</span> Preferences</button>
-    <div class="profile">
-      <div id="profileAvatar" class="avatar">S</div>
-      <div><strong id="profileRole">Student</strong><small>Personal workspace</small></div>
+    <div class="home-site-actions app-navbar-actions">
+      <span class="connection" id="connectionStatus"><i></i> API not checked</span>
+      <button id="newChatTop" class="home-site-cta" type="button">+ New research</button>
+      <button class="theme-toggle auth-nav-theme home-theme-toggle" type="button" aria-pressed="false" aria-label="Switch to dark mode">◐</button>
+      <button class="home-preferences-link" id="preferencesBtn" type="button">Preferences</button>
+      <div class="profile">
+        <div id="profileAvatar" class="avatar">S</div>
+        <div><strong id="profileRole">Student</strong><small>Personal workspace</small></div>
+      </div>
     </div>
-  </aside>
+  </header>
 
   <div class="app-main">
-    <header class="topbar">
+    <header class="topbar app-contextbar" aria-hidden="true">
       <div class="top-left">
         <button id="menuBtn" class="icon-btn mobile-only">☰</button>
         <span id="breadcrumb">Workspace / Home</span>
-      </div>
-      <div class="top-right">
-        <span class="connection" id="connectionStatus"><i></i> API not checked</span>
-        <button id="newChatTop" class="btn secondary">+ New research</button>
-        <button class="theme-toggle btn secondary" type="button" aria-pressed="false" aria-label="Switch to dark mode">☾ Dark mode</button>
-        <div id="topAvatar" class="avatar">S</div>
       </div>
     </header>
 
@@ -234,7 +231,7 @@
             THE FUTURE OF
           </span>
           <br> RESEARCH STARTS
-          <br> HERE<span class="home-title-period">!</span>
+          <br> <em class="editorial-accent">HERE</em><span class="home-title-period">!</span>
           <a class="home-inline-cta" href="#homeForm">Explore CHRONOS <span aria-hidden="true">→</span></a>
         </h1>
 

@@ -12,6 +12,56 @@ const THEME_KEY = "chronosTheme";
 const CHAT_HISTORY_KEY = "chronosChatHistory";
 const $ = id => document.getElementById(id);
 
+function enablePointerGradient() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const root = document.documentElement;
+  let currentX = 50;
+  let currentY = 35;
+  let targetX = currentX;
+  let targetY = currentY;
+  let frameId = 0;
+
+  function animate() {
+    frameId = 0;
+    const deltaX = targetX - currentX;
+    const deltaY = targetY - currentY;
+    currentX += deltaX * 0.085;
+    currentY += deltaY * 0.085;
+
+    if (Math.abs(deltaX) < 0.08 && Math.abs(deltaY) < 0.08) {
+      currentX = targetX;
+      currentY = targetY;
+    }
+
+    root.style.setProperty("--pointer-x", `${currentX.toFixed(2)}%`);
+    root.style.setProperty("--pointer-y", `${currentY.toFixed(2)}%`);
+
+    if (currentX !== targetX || currentY !== targetY) {
+      frameId = window.requestAnimationFrame(animate);
+    }
+  }
+
+  function moveGradient(event) {
+    if (event.pointerType !== "mouse") return;
+    targetX = (event.clientX / Math.max(window.innerWidth, 1)) * 100;
+    targetY = (event.clientY / Math.max(window.innerHeight, 1)) * 100;
+    if (!frameId) frameId = window.requestAnimationFrame(animate);
+  }
+
+  function resetGradient() {
+    targetX = 50;
+    targetY = 35;
+    if (!frameId) frameId = window.requestAnimationFrame(animate);
+  }
+
+  window.addEventListener("pointermove", moveGradient, { passive: true });
+  window.addEventListener("blur", resetGradient);
+  document.addEventListener("mouseleave", resetGradient);
+}
+
+enablePointerGradient();
+
 const questions = [
   {
     key: "role",
@@ -274,21 +324,21 @@ function applyGraphTheme(theme) {
 
   const colors = theme === "dark"
     ? {
-        label: "#eaf3ff",
-        outline: "#151e2b",
-        node: "#5f8fc9",
-        nodeBorder: "#a7c7f1",
-        core: "#75aaff",
-        coreBorder: "#c5ddff",
-        hub: "#89a9d1",
-        paper: "#a494d1",
-        paperBorder: "#d0c4ef",
-        researcher: "#72b89d",
-        researcherBorder: "#b0e0cb",
-        edge: "#8299b6",
-        strongEdge: "#8dbaff",
-        selected: "#d7e8ff",
-        highlighted: "#75aaff"
+      label: "#f1ece5",
+      outline: "#11100f",
+      node: "#5b86d6",
+      nodeBorder: "#a9c5ff",
+      core: "#68a6ff",
+      coreBorder: "#d5e5ff",
+      hub: "#88a6cc",
+      paper: "#a494d1",
+      paperBorder: "#d0c4ef",
+      researcher: "#72b89d",
+      researcherBorder: "#b0e0cb",
+      edge: "#76849a",
+      strongEdge: "#85afff",
+      selected: "#d7e8ff",
+      highlighted: "#75aaff"
       }
     : {
         label: "#162b45",
@@ -376,7 +426,6 @@ function openApp() {
   const initial = profile.role.charAt(0).toUpperCase();
 
   $("profileAvatar").textContent = initial;
-  $("topAvatar").textContent = initial;
   $("profileRole").textContent = profile.role;
 
   if (!activeGraph) {
@@ -1158,18 +1207,18 @@ function initializeGraph() {
         style: {
           "width": "data(size)",
           "height": "data(size)",
-          "background-color": "#c9a67d",
+          "background-color": "#5083bb",
           "border-width": 0.5,
-          "border-color": "#e1c39a",
+          "border-color": "#375f91",
           "opacity": 0.9,
           "label": "",
           "text-wrap": "wrap",
           "text-max-width": 115,
-          "color": "#f0dfc7",
+          "color": "#162b45",
           "font-family": "Arial, sans-serif",
           "font-size": 11,
           "text-outline-width": 2,
-          "text-outline-color": "#f7f5ef",
+          "text-outline-color": "#f3f7fb",
           "text-valign": "top",
           "text-margin-y": -10,
           "z-index": 5
@@ -1178,9 +1227,9 @@ function initializeGraph() {
       {
         selector: 'node[type="core"]',
         style: {
-          "background-color": "#f1debb",
+          "background-color": "#2878df",
           "border-width": 2,
-          "border-color": "#bc8068",
+          "border-color": "#1956a8",
           "label": "data(label)",
           "font-size": 23,
           "font-weight": "bold",
@@ -1191,7 +1240,7 @@ function initializeGraph() {
       {
         selector: 'node[type="hub"]',
         style: {
-          "background-color": "#dbbf98",
+          "background-color": "#85a9d0",
           "label": "data(label)",
           "font-size": 15,
           "font-weight": "bold",
@@ -1202,7 +1251,7 @@ function initializeGraph() {
       {
         selector: 'node[type="topic"]',
         style: {
-          "background-color": "#c9a67d",
+          "background-color": "#5083bb",
           "label": "data(label)",
           "font-size": 10,
           "text-margin-y": -10
@@ -1211,22 +1260,22 @@ function initializeGraph() {
       {
         selector: 'node[type="paper"]',
         style: {
-          "background-color": "#948290",
-          "border-color": "#b6a4b7"
+          "background-color": "#907dca",
+          "border-color": "#7564aa"
         }
       },
       {
         selector: 'node[type="researcher"]',
         style: {
-          "background-color": "#b87969",
-          "border-color": "#d19b87"
+          "background-color": "#4e9d80",
+          "border-color": "#32785e"
         }
       },
       {
         selector: "edge",
         style: {
           "width": 0.6,
-          "line-color": "#a68569",
+          "line-color": "#7b94b0",
           "opacity": 0.28,
           "curve-style": "straight",
           "line-cap": "round"
@@ -1237,14 +1286,14 @@ function initializeGraph() {
         style: {
           "width": 1.25,
           "opacity": 0.6,
-          "line-color": "#cf9a76"
+          "line-color": "#3985df"
         }
       },
       {
         selector: "node:selected",
         style: {
           "border-width": 3,
-          "border-color": "#f7eee3",
+          "border-color": "#164c98",
           "opacity": 1,
           "z-index": 30,
           "label": "data(label)"
@@ -1255,7 +1304,7 @@ function initializeGraph() {
         style: {
           "opacity": 0.85,
           "width": 1.7,
-          "line-color": "#f0bb9d"
+          "line-color": "#2671df"
         }
       },
       {
