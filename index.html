@@ -228,7 +228,29 @@
         <div class="eyebrow">YOUR RESEARCH COMPANION</div>
         <h1>
           <span class="home-heading-line">
-            <span class="home-hero-art" aria-hidden="true"></span>
+            <span class="home-hero-art" aria-hidden="true">
+              <svg class="home-orbit" viewBox="0 0 140 80">
+                <ellipse cx="70" cy="40" rx="70" ry="40"></ellipse>
+                <path id="home-orbit-path"
+                  d="M 140 40 A 70 40 0 1 1 0 40 A 70 40 0 1 1 140 40"
+                  fill="none"></path>
+                <circle r="5" fill="var(--sun)">
+                  <animateMotion dur="7s" repeatCount="indefinite" begin="0s" calcMode="linear">
+                    <mpath href="#home-orbit-path"></mpath>
+                  </animateMotion>
+                </circle>
+                <circle r="5" fill="var(--sun)">
+                  <animateMotion dur="7s" repeatCount="indefinite" begin="-2.333333s" calcMode="linear">
+                    <mpath href="#home-orbit-path"></mpath>
+                  </animateMotion>
+                </circle>
+                <circle r="5" fill="var(--sun)">
+                  <animateMotion dur="7s" repeatCount="indefinite" begin="-4.666667s" calcMode="linear">
+                    <mpath href="#home-orbit-path"></mpath>
+                  </animateMotion>
+                </circle>
+              </svg>
+            </span>
             THE FUTURE OF
           </span>
           <br> RESEARCH STARTS
@@ -333,10 +355,43 @@
               <svg class="chat-orbit" viewBox="0 0 140 100" aria-hidden="true">
                 <g transform="rotate(-20 70 50)">
                   <ellipse cx="70" cy="50" rx="70" ry="50"></ellipse>
-                  <circle r="4.5" fill="var(--sun)">
+                  <circle cx="70" cy="50" r="5" fill="var(--sun)">
                     <animateMotion
                       dur="7s"
                       repeatCount="indefinite"
+                      begin="-0s"
+                      path="M 70 50 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0">
+                    </animateMotion>
+                  </circle>
+                  <circle cx="70" cy="50" r="5" fill="var(--sun)">
+                    <animateMotion
+                      dur="7s"
+                      repeatCount="indefinite"
+                      begin="-1.4s"
+                      path="M 70 50 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0">
+                    </animateMotion>
+                  </circle>
+                  <circle cx="70" cy="50" r="5" fill="var(--sun)">
+                    <animateMotion
+                      dur="7s"
+                      repeatCount="indefinite"
+                      begin="-2.8s"
+                      path="M 70 50 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0">
+                    </animateMotion>
+                  </circle>
+                  <circle cx="70" cy="50" r="5" fill="var(--sun)">
+                    <animateMotion
+                      dur="7s"
+                      repeatCount="indefinite"
+                      begin="-4.2s"
+                      path="M 70 50 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0">
+                    </animateMotion>
+                  </circle>
+                  <circle cx="70" cy="50" r="5" fill="var(--sun)">
+                    <animateMotion
+                      dur="7s"
+                      repeatCount="indefinite"
+                      begin="-5.6s"
                       path="M 70 50 m -70 0 a 70 50 0 1 0 140 0 a 70 50 0 1 0 -140 0">
                     </animateMotion>
                   </circle>
